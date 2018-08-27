@@ -96,6 +96,8 @@ def test_disable_and_enable_auth_set_access_control_restricted():
 # By default nestedgroup is disabled for ad and openldap, enabled for freeipa
 def test_disable_and_enable_nestedgroups_set_access_control_required():
     access_mode = "required"
+    print "variable name:  " + HOSTNAME_OR_IP_ADDRESS + "\n" + PORT + "\n" + TLS + "\n" + CONNECTION_TIMEOUT + "\n" + SERVICE_ACCOUNT_NAME +"\n" + SERVICE_ACCOUNT_PASSWORD + "\n" + DEFAULT_LOGIN_DOMAIN + "\n" + USER_SEARCH_BASE + "\n" + PASSWORD
+
     validate_access_control_disable_and_enable_nestedgroups(access_mode)
 
 
@@ -504,10 +506,12 @@ def enable_openldap_nestedgroup(username, token, expected_status=200):
 
 
 def enable_ad(username, token, expected_status=200):
+    print "variable name2222:  " + HOSTNAME_OR_IP_ADDRESS + "\n" + PORT + "\n" + TLS + "\n" + CONNECTION_TIMEOUT + "\n" + SERVICE_ACCOUNT_NAME +"\n" + SERVICE_ACCOUNT_PASSWORD + "\n" + DEFAULT_LOGIN_DOMAIN + "\n" + USER_SEARCH_BASE + "\n" + PASSWORD
+
     headers = {'Authorization': 'Bearer ' + token}
     activeDirectoryConfig = {
           "accessMode": "unrestricted",
-          "certificate": "-----BEGIN CERTIFICATE-----\nMIIFqDCCA5CgAwIBAgIJANQm89Tn7o6IMA0GCSqGSIb3DQEBCwUAMGExCzAJBgNV\nBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRIwEAYDVQQHDAlDdXBlcnRpbm8x\nEjAQBgNVBAoMCVJhamFzaHJlZTEVMBMGA1UEAwwMUmFqYXNocmVlIENBMB4XDTE3\nMDcxMzIzMTkxMloXDTM3MDcwODIzMTkxMlowYTELMAkGA1UEBhMCVVMxEzARBgNV\nBAgMCkNhbGlmb3JuaWExEjAQBgNVBAcMCUN1cGVydGlubzESMBAGA1UECgwJUmFq\nYXNocmVlMRUwEwYDVQQDDAxSYWphc2hyZWUgQ0EwggIiMA0GCSqGSIb3DQEBAQUA\nA4ICDwAwggIKAoICAQC3Rl0uelJgmcGeB5+T0KTRKc2+CWkm/M2hHElDf3UJk2PX\n5VP03+5a2CxjiPr9Ivz91asyVuUKeP7khnpWub9ZtHZQKOAIk0eh9vlOMtz3hT8y\neby37Svb10+UyriSAT3wMqTmhRHUaVLtDJcvbJ4iBBImCMptKaQc73EZKbnsVibm\nZlb/GaoGQj0nPH+mpaylQ53wEb9cIWgOUvszm+macrFwj4cGF7wluRGqgJZSM9Bi\nRBIy9ufjlb0WqZ0mo/rjZv/NGrS9boSAr9FGHaWzPSJoV7wpZqQkUkZ5cqWbf0co\nx4v3lrUyPD55NEzKLDC+oJc651hJCwkdERfELRi/fKq8ARBao0KikyqRXnbADIA/\nzaQrAKzpNrA0elnK4gbj3lsJepC1AueRy/TBqDJLH42pXXPsz9o8Vo3H+9+67wOC\nHgPB/trgeIPi1Ji49yXng6ix30L1FBRcExrD9KYCxVJZhmbafK+UWci8IBL0SKNG\nAGCkUgIz9J+DkLc4g7txfNdD9+N8sn+/h1xJ1xLUWvBLSvuYCLD+bQF8fWEHEZM1\nVjqBaW9wU/p2cbyfRVMXjhlRM4J7uZBiQpVbK8YUql7svFWrHH2EhcLxWjD/KnOt\niv9hjxIsPSqR4zYI8r0Xt/117GpdbyehF70GHxHl3h7jL6pwculjIeAk0lVEuQID\nAQABo2MwYTAdBgNVHQ4EFgQUoElq36seNa5+E7f4r/H4bzJj50AwHwYDVR0jBBgw\nFoAUoElq36seNa5+E7f4r/H4bzJj50AwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8B\nAf8EBAMCAYYwDQYJKoZIhvcNAQELBQADggIBAJWvMwn2nJvsuqTyV2xk9AGWLI95\ndqLhUZKjoFu0c3GQ6gSxS2g1jeZqbZWw9Juz7IJNw6AXp+cWP96v/EK2hdM1FW3v\ny8ZGjRUoXemxsiTOKTqXGO+v06gLWMYDKgr/cYotwyrKZ+PublMCDfeq9Y1jmw5A\nntu/sLi/CjzU4hwkJ+aIGFRP0CGXbBjjknHgW50DyyX64nWF7MBXXD1aHp3MlmSz\n/QON9qKrqUhWYUKdbGxv/NsQfwoNFL3MVsRokjmjZeLKRISODh8cEHpuuuKyP204\nhsitC84pE7icHbo1YZJMqCKr1QBCBnu+CO54kqIyY6fqc/vaSL4AD4NUBZDJLSXI\nzfaQZFCLbNFBAEZPsjv3iLbt7XvwsyqfPL+1H6UHcXCzzgfEMB+JztK31VRnlkHZ\nSy1VqqMiXhTyv9KzBt8uEb1CM/2PUQauKyAMWBKxrNfLrg+TNylPw8A4tFafKVie\nNfjBJSMQGzF8ftoD4WeADWK7dbifuqyyLQTLkI3XSQAl7slaax+FKTalnj674Hlr\nvR4cWUYXVljGOnQO8xSszJ11uTnXH53ZDyfz0VGi92zKiMJxD9SttoMwFlGgJmaF\npKBovwe7rseLXaRunDvNS/JJP8YVZxUEg86HuXO34f4lR9SlXK3cjeLiEYcP35uk\ndQ7yXAP0RthRkuac\n-----END CERTIFICATE-----",
+          "certificate": CA_CERTIFICATE,
           "connectionTimeout": CONNECTION_TIMEOUT,
           "defaultLoginDomain": DEFAULT_LOGIN_DOMAIN,
           "groupDNAttribute": "distinguishedName",
@@ -548,13 +552,11 @@ def enable_ad(username, token, expected_status=200):
 
 
 def disable_ad(username, token, expected_status=200):
-    print "tokennnn: " + token
-    print "usernameeee:" + username
     headers = {'Authorization': 'Bearer ' + token}
     r = requests.post(CATTLE_AUTH_DISABLE_URL, json={
       "enabled": False,
       "username": username,
-      "password": "Password1"
+      "password": PASSWORD
     }, verify=False, headers=headers)
     assert r.status_code == expected_status
     print "Disable ActiveDirectory request for " + username + " " + str(expected_status)
@@ -564,7 +566,7 @@ def enable_ad_nestedgroups(username, token, expected_status=200):
     headers = {'Authorization': 'Bearer ' + token}
     activeDirectoryConfig = {
           "accessMode": "unrestricted",
-          "certificate": "-----BEGIN CERTIFICATE-----\nMIIFqDCCA5CgAwIBAgIJANQm89Tn7o6IMA0GCSqGSIb3DQEBCwUAMGExCzAJBgNV\nBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRIwEAYDVQQHDAlDdXBlcnRpbm8x\nEjAQBgNVBAoMCVJhamFzaHJlZTEVMBMGA1UEAwwMUmFqYXNocmVlIENBMB4XDTE3\nMDcxMzIzMTkxMloXDTM3MDcwODIzMTkxMlowYTELMAkGA1UEBhMCVVMxEzARBgNV\nBAgMCkNhbGlmb3JuaWExEjAQBgNVBAcMCUN1cGVydGlubzESMBAGA1UECgwJUmFq\nYXNocmVlMRUwEwYDVQQDDAxSYWphc2hyZWUgQ0EwggIiMA0GCSqGSIb3DQEBAQUA\nA4ICDwAwggIKAoICAQC3Rl0uelJgmcGeB5+T0KTRKc2+CWkm/M2hHElDf3UJk2PX\n5VP03+5a2CxjiPr9Ivz91asyVuUKeP7khnpWub9ZtHZQKOAIk0eh9vlOMtz3hT8y\neby37Svb10+UyriSAT3wMqTmhRHUaVLtDJcvbJ4iBBImCMptKaQc73EZKbnsVibm\nZlb/GaoGQj0nPH+mpaylQ53wEb9cIWgOUvszm+macrFwj4cGF7wluRGqgJZSM9Bi\nRBIy9ufjlb0WqZ0mo/rjZv/NGrS9boSAr9FGHaWzPSJoV7wpZqQkUkZ5cqWbf0co\nx4v3lrUyPD55NEzKLDC+oJc651hJCwkdERfELRi/fKq8ARBao0KikyqRXnbADIA/\nzaQrAKzpNrA0elnK4gbj3lsJepC1AueRy/TBqDJLH42pXXPsz9o8Vo3H+9+67wOC\nHgPB/trgeIPi1Ji49yXng6ix30L1FBRcExrD9KYCxVJZhmbafK+UWci8IBL0SKNG\nAGCkUgIz9J+DkLc4g7txfNdD9+N8sn+/h1xJ1xLUWvBLSvuYCLD+bQF8fWEHEZM1\nVjqBaW9wU/p2cbyfRVMXjhlRM4J7uZBiQpVbK8YUql7svFWrHH2EhcLxWjD/KnOt\niv9hjxIsPSqR4zYI8r0Xt/117GpdbyehF70GHxHl3h7jL6pwculjIeAk0lVEuQID\nAQABo2MwYTAdBgNVHQ4EFgQUoElq36seNa5+E7f4r/H4bzJj50AwHwYDVR0jBBgw\nFoAUoElq36seNa5+E7f4r/H4bzJj50AwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8B\nAf8EBAMCAYYwDQYJKoZIhvcNAQELBQADggIBAJWvMwn2nJvsuqTyV2xk9AGWLI95\ndqLhUZKjoFu0c3GQ6gSxS2g1jeZqbZWw9Juz7IJNw6AXp+cWP96v/EK2hdM1FW3v\ny8ZGjRUoXemxsiTOKTqXGO+v06gLWMYDKgr/cYotwyrKZ+PublMCDfeq9Y1jmw5A\nntu/sLi/CjzU4hwkJ+aIGFRP0CGXbBjjknHgW50DyyX64nWF7MBXXD1aHp3MlmSz\n/QON9qKrqUhWYUKdbGxv/NsQfwoNFL3MVsRokjmjZeLKRISODh8cEHpuuuKyP204\nhsitC84pE7icHbo1YZJMqCKr1QBCBnu+CO54kqIyY6fqc/vaSL4AD4NUBZDJLSXI\nzfaQZFCLbNFBAEZPsjv3iLbt7XvwsyqfPL+1H6UHcXCzzgfEMB+JztK31VRnlkHZ\nSy1VqqMiXhTyv9KzBt8uEb1CM/2PUQauKyAMWBKxrNfLrg+TNylPw8A4tFafKVie\nNfjBJSMQGzF8ftoD4WeADWK7dbifuqyyLQTLkI3XSQAl7slaax+FKTalnj674Hlr\nvR4cWUYXVljGOnQO8xSszJ11uTnXH53ZDyfz0VGi92zKiMJxD9SttoMwFlGgJmaF\npKBovwe7rseLXaRunDvNS/JJP8YVZxUEg86HuXO34f4lR9SlXK3cjeLiEYcP35uk\ndQ7yXAP0RthRkuac\n-----END CERTIFICATE-----",
+          "certificate": CA_CERTIFICATE,
           "connectionTimeout": CONNECTION_TIMEOUT,
           "defaultLoginDomain": DEFAULT_LOGIN_DOMAIN,
           "groupDNAttribute": "distinguishedName",
