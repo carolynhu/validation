@@ -548,11 +548,13 @@ def enable_ad(username, token, expected_status=200):
 
 
 def disable_ad(username, token, expected_status=200):
+    print "tokennnn: " + token
+    print "usernameeee:" + username
     headers = {'Authorization': 'Bearer ' + token}
     r = requests.post(CATTLE_AUTH_DISABLE_URL, json={
       "enabled": False,
       "username": username,
-      "password": PASSWORD
+      "password": "Password1"
     }, verify=False, headers=headers)
     assert r.status_code == expected_status
     print "Disable ActiveDirectory request for " + username + " " + str(expected_status)
