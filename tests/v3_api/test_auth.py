@@ -6,12 +6,16 @@ import json
 
 AUTH_PROVIDER = os.environ.get('RANCHER_AUTH_PROVIDER', "")
 
-# All tests require Auth being setup already, and 2 clusters to be available in the setup.
+'''
+Prerequisite:
+1. Set up auth, make testautoadmin as your admin user
+2. Create two clusters in your setup
+'''
+
 # Config Fields
 HOSTNAME_OR_IP_ADDRESS = os.environ.get("RANCHER_HOSTNAME_OR_IP_ADDRESS")
 PORT = os.environ.get("RANCHER_PORT")
-TLS = os.environ.get("RANCHER_TLS")
-CA_CERTIFICATE = os.environ.get("RANCHER_CA_CERTIFICATE")
+CA_CERTIFICATE = os.environ.get("RANCHER_CA_CERTIFICATE", "")
 CONNECTION_TIMEOUT = os.environ.get("RANCHER_CONNECTION_TIMEOUT")
 SERVICE_ACCOUNT_NAME = os.environ.get("RANCHER_SERVICE_ACCOUNT_NAME")
 SERVICE_ACCOUNT_PASSWORD = os.environ.get("RANCHER_SERVICE_ACCOUNT_PASSWORD")
@@ -96,8 +100,6 @@ def test_disable_and_enable_auth_set_access_control_restricted():
 # By default nestedgroup is disabled for ad and openldap, enabled for freeipa
 def test_disable_and_enable_nestedgroups_set_access_control_required():
     access_mode = "required"
-    print "variable name:  " + HOSTNAME_OR_IP_ADDRESS + "\n" + PORT + "\n" + TLS + "\n" + CONNECTION_TIMEOUT + "\n" + SERVICE_ACCOUNT_NAME +"\n" + SERVICE_ACCOUNT_PASSWORD + "\n" + DEFAULT_LOGIN_DOMAIN + "\n" + USER_SEARCH_BASE + "\n" + PASSWORD
-
     validate_access_control_disable_and_enable_nestedgroups(access_mode)
 
 
@@ -303,6 +305,7 @@ def validate_add_users_and_groups_to_cluster_or_project(
 
 def validate_access_control_disable_and_enable_auth(access_mode):
     delete_cluster_users()
+    delete_project_users()
     auth_setup_data = setup["auth_setup_data"]
 
     # Login as admin user to disable auth, should be success, then enable it.
@@ -411,6 +414,14 @@ def login(username, password, expected_status=201):
     return token
 
 
+def get_tls(certificate):
+    if len(certificate) != 0:
+        tls = True
+    else:
+        tls = False
+    return tls
+
+
 def enable_openldap(username, token, expected_status=200):
     headers = {'Authorization': 'Bearer ' + token}
     ldapConfig = {
@@ -430,7 +441,7 @@ def enable_openldap(username, token, expected_status=200):
           HOSTNAME_OR_IP_ADDRESS
         ],
         "serviceAccountDistinguishedName": SERVICE_ACCOUNT_NAME,
-        "tls": TLS,
+        "tls": get_tls(CA_CERTIFICATE),
         "userDisabledBitMask": 0,
         "userLoginAttribute": "uid",
         "userMemberAttribute": "memberOf",
@@ -482,7 +493,7 @@ def enable_openldap_nestedgroup(username, token, expected_status=200):
           HOSTNAME_OR_IP_ADDRESS
         ],
         "serviceAccountDistinguishedName": SERVICE_ACCOUNT_NAME,
-        "tls": TLS,
+        "tls": get_tls(CA_CERTIFICATE),
         "userDisabledBitMask": 0,
         "userLoginAttribute": "uid",
         "userMemberAttribute": "memberOf",
@@ -506,8 +517,6 @@ def enable_openldap_nestedgroup(username, token, expected_status=200):
 
 
 def enable_ad(username, token, expected_status=200):
-    print "variable name2222:  " + HOSTNAME_OR_IP_ADDRESS + "\n" + PORT + "\n" + TLS + "\n" + CONNECTION_TIMEOUT + "\n" + SERVICE_ACCOUNT_NAME +"\n" + SERVICE_ACCOUNT_PASSWORD + "\n" + DEFAULT_LOGIN_DOMAIN + "\n" + USER_SEARCH_BASE + "\n" + PASSWORD
-
     headers = {'Authorization': 'Bearer ' + token}
     activeDirectoryConfig = {
           "accessMode": "unrestricted",
@@ -526,7 +535,7 @@ def enable_ad(username, token, expected_status=200):
               HOSTNAME_OR_IP_ADDRESS
           ],
           "serviceAccountUsername": SERVICE_ACCOUNT_NAME,
-          "tls": True,
+          "tls": get_tls(CA_CERTIFICATE),
           "userDisabledBitMask": 2,
           "userEnabledAttribute": "userAccountControl",
           "userLoginAttribute": "sAMAccountName",
@@ -546,7 +555,6 @@ def enable_ad(username, token, expected_status=200):
       "username": username,
       "password": PASSWORD
     }, verify=False, headers=headers)
-    print r.json
     assert r.status_code == expected_status
     print "Enable ActiveDirectory request for " + username + " " + str(expected_status)
 
@@ -581,7 +589,7 @@ def enable_ad_nestedgroups(username, token, expected_status=200):
               HOSTNAME_OR_IP_ADDRESS
           ],
           "serviceAccountUsername": SERVICE_ACCOUNT_NAME,
-          "tls": True,
+          "tls": get_tls(CA_CERTIFICATE),
           "userDisabledBitMask": 2,
           "userEnabledAttribute": "userAccountControl",
           "userLoginAttribute": "sAMAccountName",
@@ -601,7 +609,6 @@ def enable_ad_nestedgroups(username, token, expected_status=200):
       "username": username,
       "password": PASSWORD
     }, verify=False, headers=headers)
-    print r.json
     assert r.status_code == expected_status
     print "Enable ActiveDirectory nestedgroup request for " + username + " " + str(expected_status)
 
@@ -611,6 +618,7 @@ def enable_freeipa(username, token, expected_status=200):
     r = requests.post(CATTLE_AUTH_ENABLE_URL, json={
         "ldapConfig": {
             "accessMode": "unrestricted",
+            "certificate": CA_CERTIFICATE,
             "connectionTimeout": CONNECTION_TIMEOUT,
             "groupDNAttribute": "entrydn",
             "groupMemberMappingAttribute": "member",
@@ -626,7 +634,7 @@ def enable_freeipa(username, token, expected_status=200):
                 HOSTNAME_OR_IP_ADDRESS
             ],
             "serviceAccountDistinguishedName": SERVICE_ACCOUNT_NAME,
-            "tls": TLS,
+            "tls": get_tls(CA_CERTIFICATE),
             "userDisabledBitMask": 0,
             "userLoginAttribute": "uid",
             "userMemberAttribute": "memberOf",
